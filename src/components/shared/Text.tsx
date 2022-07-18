@@ -1,10 +1,12 @@
-import { Typography, TypographyProps } from "@mui/material";
+import { Breakpoint, Typography, TypographyProps } from "@mui/material";
 import { Variant } from "@mui/material/styles/createTypography";
-import { useBreakpoints } from "hooks";
-import { BreakpointsOptions } from "hooks/useBreakpoints";
+import { useBreakpoints, BreakpointsOptions } from "hooks";
 import React, { memo, useMemo } from "react";
+import { getActiveBreakpoint } from "utils";
 
-export type TextProps = {} & TypographyProps;
+export type TextProps = Omit<TypographyProps, "variant"> & {
+  variant: string | { [key: string]: string };
+};
 
 const defaultTextProps = {
   variant: "body1",
@@ -13,15 +15,15 @@ const defaultTextProps = {
 const Text = ({ children, variant: variantProps, ...rest }: TextProps) => {
   const { currentRatio } = useBreakpoints();
 
-  const variant: Variant | "inherit" = useMemo(() => {
+  const variant = useMemo(() => {
     if (typeof variantProps === "object") {
-      return variantProps[currentRatio];
+      return getActiveBreakpoint(currentRatio, variantProps) ?? "body1";
     } else if (variantProps && currentRatio === BreakpointsOptions.sm) {
       return getVariantMobile(variantProps as Variant);
     } else {
       return variantProps ?? "body1";
     }
-  }, [variantProps, currentRatio]);
+  }, [variantProps, currentRatio]) as Variant | "inherit";
 
   return (
     <Typography variant={variant} {...rest}>
