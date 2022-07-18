@@ -2,6 +2,7 @@ import { DARK_THEME_MEDIA_SYSTEM, DEFAULT_LANGUAGE } from "constant";
 import { AppearanceType } from "constant/enum";
 import { LanguageType } from "constant/types";
 import { clientStorage } from "utils/storage";
+import { BreakpointsOptions } from "hooks";
 
 export const getTheme = (
   key: string,
@@ -45,5 +46,40 @@ export const parseJSON = (data: string, defaultData: unknown): unknown => {
   } catch (error) {
     console.error(error);
     return defaultData;
+  }
+};
+
+export const getActiveBreakpoint = (
+  currentRatio: Breakpoint,
+  options: { [key: string]: string }
+) => {
+  switch (currentRatio) {
+    case BreakpointsOptions.xl:
+      return (
+        options[BreakpointsOptions.xl] ??
+        options[BreakpointsOptions.lg] ??
+        options[BreakpointsOptions.md] ??
+        options[BreakpointsOptions.sm] ??
+        options[BreakpointsOptions.xs]
+      );
+    case BreakpointsOptions.lg:
+      return (
+        options[BreakpointsOptions.lg] ??
+        options[BreakpointsOptions.md] ??
+        options[BreakpointsOptions.sm] ??
+        options[BreakpointsOptions.xs]
+      );
+    case BreakpointsOptions.md:
+      return (
+        options[BreakpointsOptions.md] ??
+        options[BreakpointsOptions.sm] ??
+        options[BreakpointsOptions.xs]
+      );
+    case BreakpointsOptions.sm:
+      return options[BreakpointsOptions.sm] ?? options[BreakpointsOptions.xs];
+    case BreakpointsOptions.xs:
+      return options[BreakpointsOptions.xs];
+    default:
+      return;
   }
 };
