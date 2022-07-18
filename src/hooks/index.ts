@@ -1,4 +1,4 @@
-import useBreakpoints from "./useBreakpoints";
+import useBreakpoints, { BreakpointsOptions } from "./useBreakpoints";
 import useWindowSize from "./useWindowSize";
 
-export { useBreakpoints, useWindowSize };
+export { useBreakpoints, useWindowSize, BreakpointsOptions };
